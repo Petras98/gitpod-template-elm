@@ -13,28 +13,22 @@ import Tailwind.Breakpoints as Bp
 import Tailwind.Utilities as Tw
 
 
-type alias Model =
-    { count : Int }
+type Model
+    = Model
 
 
 initialModel : Model
 initialModel =
-    { count = 0 }
+    Model
 
 
 type Msg
-    = Increment
-    | Decrement
+    = Msg
 
 
 update : Msg -> Model -> Model
 update msg model =
-    case msg of
-        Increment ->
-            { model | count = model.count + 1 }
-
-        Decrement ->
-            { model | count = model.count - 1 }
+    Model
 
 
 fakeVaults =
@@ -64,6 +58,9 @@ mytable vaults =
     let
         tableRows =
             List.indexedMap row vaults
+
+        headers =
+            List.map header [ "Below", "In-Range", "Above" ]
     in
     div
         [ css
@@ -120,79 +117,7 @@ mytable vaults =
                                 [ Tw.bg_gray_50
                                 ]
                             ]
-                            [ tr []
-                                [ th
-                                    [ Attr.scope "col"
-                                    , css
-                                        [ Tw.px_6
-                                        , Tw.py_3
-                                        , Tw.text_left
-                                        , Tw.text_xs
-                                        , Tw.font_medium
-                                        , Tw.text_gray_500
-                                        , Tw.uppercase
-                                        , Tw.tracking_wider
-                                        ]
-                                    ]
-                                    [ text "Name" ]
-                                , th
-                                    [ Attr.scope "col"
-                                    , css
-                                        [ Tw.px_6
-                                        , Tw.py_3
-                                        , Tw.text_left
-                                        , Tw.text_xs
-                                        , Tw.font_medium
-                                        , Tw.text_gray_500
-                                        , Tw.uppercase
-                                        , Tw.tracking_wider
-                                        ]
-                                    ]
-                                    [ text "Title" ]
-                                , th
-                                    [ Attr.scope "col"
-                                    , css
-                                        [ Tw.px_6
-                                        , Tw.py_3
-                                        , Tw.text_left
-                                        , Tw.text_xs
-                                        , Tw.font_medium
-                                        , Tw.text_gray_500
-                                        , Tw.uppercase
-                                        , Tw.tracking_wider
-                                        ]
-                                    ]
-                                    [ text "Email" ]
-                                , th
-                                    [ Attr.scope "col"
-                                    , css
-                                        [ Tw.px_6
-                                        , Tw.py_3
-                                        , Tw.text_left
-                                        , Tw.text_xs
-                                        , Tw.font_medium
-                                        , Tw.text_gray_500
-                                        , Tw.uppercase
-                                        , Tw.tracking_wider
-                                        ]
-                                    ]
-                                    [ text "Role" ]
-                                , th
-                                    [ Attr.scope "col"
-                                    , css
-                                        [ Tw.relative
-                                        , Tw.px_6
-                                        , Tw.py_3
-                                        ]
-                                    ]
-                                    [ span
-                                        [ css
-                                            [ Tw.sr_only
-                                            ]
-                                        ]
-                                        [ text "Edit" ]
-                                    ]
-                                ]
+                            [ tr [] headers
                             ]
                         , tbody [] tableRows
                         ]
@@ -200,6 +125,24 @@ mytable vaults =
                 ]
             ]
         ]
+
+
+header : String -> Html msg
+header title =
+    th
+        [ Attr.scope "col"
+        , css
+            [ Tw.px_6
+            , Tw.py_3
+            , Tw.text_left
+            , Tw.text_xs
+            , Tw.font_medium
+            , Tw.text_gray_500
+            , Tw.uppercase
+            , Tw.tracking_wider
+            ]
+        ]
+        [ text title ]
 
 
 row : Int -> Vault -> Html msg
@@ -227,7 +170,7 @@ row index vault =
                 , Tw.text_gray_900
                 ]
             ]
-            [ text "Jane Cooper" ]
+            [ text (String.fromInt vault.below) ]
         , td
             [ css
                 [ Tw.px_6
@@ -237,7 +180,7 @@ row index vault =
                 , Tw.text_gray_500
                 ]
             ]
-            [ text "Regional Paradigm Technician" ]
+            [ text (String.fromInt vault.inRange) ]
         , td
             [ css
                 [ Tw.px_6
@@ -247,36 +190,5 @@ row index vault =
                 , Tw.text_gray_500
                 ]
             ]
-            [ text "jane.cooper@example.com" ]
-        , td
-            [ css
-                [ Tw.px_6
-                , Tw.py_4
-                , Tw.whitespace_nowrap
-                , Tw.text_sm
-                , Tw.text_gray_500
-                ]
-            ]
-            [ text "Admin" ]
-        , td
-            [ css
-                [ Tw.px_6
-                , Tw.py_4
-                , Tw.whitespace_nowrap
-                , Tw.text_right
-                , Tw.text_sm
-                , Tw.font_medium
-                ]
-            ]
-            [ a
-                [ Attr.href "#"
-                , css
-                    [ Tw.text_indigo_600
-                    , Css.hover
-                        [ Tw.text_indigo_900
-                        ]
-                    ]
-                ]
-                [ text "Edit" ]
-            ]
+            [ text (String.fromInt vault.above) ]
         ]
